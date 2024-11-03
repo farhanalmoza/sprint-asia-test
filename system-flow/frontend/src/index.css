@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-[#fff];
+
+  .container {
+    @apply bg-[#eee] min-h-[800px] mx-auto px-4 py-6 max-w-96;
+  }
+}

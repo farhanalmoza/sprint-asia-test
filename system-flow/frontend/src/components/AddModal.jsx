@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { taskService } from "../services/task.service";
 import toast from "react-hot-toast";
 
-function AddModal({ isOpen, onClose }) {
+function AddModal({ isOpen, onClose, onSave }) {
   if (!isOpen) return null;
   
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +19,7 @@ function AddModal({ isOpen, onClose }) {
       await taskService.createTask(inputs);
       resetForm();
       toast.success("Task added successfully")
+      onSave();
       onClose();
     } catch (error) {
       console.log("Error saving task", error);

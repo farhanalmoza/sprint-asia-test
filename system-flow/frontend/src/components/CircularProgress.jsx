@@ -24,7 +24,7 @@ const CircularProgress = (props) => {
 				/>
 			</svg>
 			<div className="absolute text-xs font-medium">
-				50%
+				{normalizedPercentage}%
 			</div>
 		</div>
 	)

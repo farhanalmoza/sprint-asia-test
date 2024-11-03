@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     public function getAll() {
-        $tasks = Task::all();
+        $tasks = Task::with('subtasks')->get();
         return response()->json([
             "success" => true,
             "message" => "Task retrieved successfully.",

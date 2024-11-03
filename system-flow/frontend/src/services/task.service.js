@@ -13,7 +13,7 @@ export const taskService = {
   // get all tasks
   getAllTasks: async () => {
     try {
-      const { response } = await api.get("/");
+      const response = await api.get("");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -24,6 +24,18 @@ export const taskService = {
   createTask: async (task) => {
     try {
       const { success, data, message } = await api.post("/", task);
+      if (success) {
+        return message;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  // update a task
+  updateTask: async (task) => {
+    try {
+      const { success, data, message } = await api.put("/"+task.id, task);
       if (success) {
         return message;
       }

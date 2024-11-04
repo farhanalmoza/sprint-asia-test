@@ -67,6 +67,8 @@ const Home = () => {
       }
       await taskService.updateTask(taskId, { ...tasks.find((task) => task.id === taskId), status, completed_at });
       fetchTasks();
+      setActiveTask;
+      toast.success("Task status updated successfully");
     } catch (error) {
       console.error("Error updating task status", error);
     } finally {
@@ -121,24 +123,29 @@ const Home = () => {
         </div>
       )}
 
-      <form onSubmit={handleAddTask} className="flex justify-center gap-2 mb-4">
+      <form onSubmit={handleAddTask} className="grid justify-center gap-2 mb-4 md:flex">
         <input
           type="text"
           placeholder="Task title"
           onChange={(e) => setAddTaskInputs({ ...addTaskInputs, title: e.target.value })}
           value={addTaskInputs.title}
+          className="px-2 py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-indigo-500 focus:border-indigo-500"
           required />
         <input
           type="datetime-local"
           onChange={(e) => setAddTaskInputs({ ...addTaskInputs, deadline: e.target.value })}
+          value={addTaskInputs.deadline}
+          className="px-2 py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-indigo-500 focus:border-indigo-500"
           required />
-        <button type="submit">Add Task</button>
+        <button
+          type="submit"
+          className="px-2 py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 bg-[#5f33e1] text-white"
+        >Add Task</button>
       </form>
 
       <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTask}>
         <TabsList className="flex w-full grid-cols-4 text-center">
           <TabsTrigger value="all">All ({tasks.length})</TabsTrigger>
-          <TabsTrigger value="todo">To do ({getFilteredTasks("todo").length})</TabsTrigger>
           <TabsTrigger value="ongoing">On going ({getFilteredTasks("ongoing").length})</TabsTrigger>
           <TabsTrigger value="completed">Completed ({getFilteredTasks("completed").length})</TabsTrigger>
         </TabsList>
@@ -161,27 +168,39 @@ const Home = () => {
           />
         </TabsContent>
 
-        <TabsContent value="todo">
-          <TaskList
-            tasks={getFilteredTasks("todo")}
-            onDelete={handleDeleteTask}
-            onCheckTask={handleCheckTask}
-          />
-        </TabsContent>
-
         <TabsContent value="ongoing">
+          {editingTask && (
+            <EditTaskForm
+              task={editingTask}
+              onCancel={() => setEditingTask(null)}
+              onSave={(updatedData) => handleUpdateTask(editingTask.id, updatedData)}
+            />
+          )}
+
           <TaskList
             tasks={getFilteredTasks("ongoing")}
             onDelete={handleDeleteTask}
             onCheckTask={handleCheckTask}
+            onEdit={handleEditTask}
+            onUpdate={handleUpdateTask}
           />
         </TabsContent>
 
         <TabsContent value="completed">
+          {editingTask && (
+            <EditTaskForm
+              task={editingTask}
+              onCancel={() => setEditingTask(null)}
+              onSave={(updatedData) => handleUpdateTask(editingTask.id, updatedData)}
+            />
+          )}
+
           <TaskList
             tasks={getFilteredTasks("completed")}
             onDelete={handleDeleteTask}
             onCheckTask={handleCheckTask}
+            onEdit={handleEditTask}
+            onUpdate={handleUpdateTask}
           />
         </TabsContent>
       </Tabs>

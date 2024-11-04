@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class SubtaskController extends Controller
 {
-    public function getAllByTaskId(Request $request) {
-        $subtasks = Subtask::where('task_id', $request->id)->get();
+    public function getAllByTaskId() {
+        $taskId = request()->taskId;
+        $subtasks = Subtask::where('task_id', $taskId)->get();
         return response()->json([
             "success" => true,
             "message" => "Subtasks retrieved successfully.",
@@ -19,10 +20,8 @@ class SubtaskController extends Controller
 
     public function store(Request $request) {
         $subtask = new Subtask();
-        $subtask->task_id = $request->task_id;
+        $subtask->task_id = $request->taskId;
         $subtask->title = $request->title;
-        $subtask->description = $request->description;
-        $subtask->status = "todo";
 
         if($subtask->save()) {
             return response()->json([
@@ -60,11 +59,17 @@ class SubtaskController extends Controller
         $subtask = Subtask::find($request->id);
         if($subtask) {
             $subtask->title = $request->title;
-            $subtask->description = $request->description;
             $subtask->status = $request->status;
             $subtask->completed_at = $request->completed_at;
 
             if($subtask->save()) {
+                $subtasks = Subtask::where('task_id', $request->taskId)->where('status', 'ongoing')->get();
+
+                if ($subtasks->count() === 0) {
+                    Task::where('id', $request->taskId)->update(['status' => 'completed']);
+                } else {
+                    Task::where('id', $request->taskId)->update(['status' => 'ongoing']);
+                }
                 return response()->json([
                     "success" => true,
                     "message" => "Subtask updated successfully.",
@@ -86,8 +91,8 @@ class SubtaskController extends Controller
         }
     }
 
-    public function destroy(Request $request) {
-        $subtask = Subtask::find($request->id);
+    public function destroy() {
+        $subtask = Subtask::find(request()->subtask_id);
         if($subtask) {
             $subtask->delete();
             return response()->json([

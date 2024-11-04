@@ -9,8 +9,8 @@ class Subtask extends Model
     protected $table = 'subtasks';
 
     protected $fillable = [
+        'task_id',
         'title',
-        'description',
         'status',
         'completed_at',
     ];

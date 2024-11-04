@@ -20,14 +20,22 @@ export const EditTaskForm = ({ task, onCancel, onSave}) => {
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        className="px-2 py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-indigo-500 focus:border-indigo-500"
       />
       <input
         type="datetime-local"
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
+        className="px-2 py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-indigo-500 focus:border-indigo-500"
       />
-      <button onClick={handleSave}>Save</button>
-      <button onClick={onCancel}>Cancel</button>
+      <button
+        onClick={handleSave}
+        className="px-2 py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 bg-[#5f33e1] text-white"
+      >Save</button>
+      <button
+        onClick={onCancel}
+        className="px-2 py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-offset-1 bg-[#e13333] text-white"
+      >Cancel</button>
     </div>
   )
 }

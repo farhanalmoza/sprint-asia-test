@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('task_id');
             $table->string('title');
-            $table->text('description')->nullable();
-            $table->enum('status', ['todo', 'ongoing', 'completed']);
-            $table->timestamp('deadline');
+            $table->enum('status', ['ongoing', 'completed'])->default('ongoing');
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });

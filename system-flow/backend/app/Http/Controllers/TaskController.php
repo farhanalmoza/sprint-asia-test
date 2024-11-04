@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subtask;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -19,9 +20,7 @@ class TaskController extends Controller
     public function store(Request $request) {
         $task = new Task();
         $task->title = $request->title;
-        $task->description = $request->description;
         $task->deadline = $request->deadline;
-        $task->status = "todo";
 
         if($task->save()) {
             return response()->json([
@@ -59,12 +58,16 @@ class TaskController extends Controller
         $task = Task::find($request->id);
         if($task) {
             $task->title = $request->title;
-            $task->description = $request->description;
             $task->deadline = $request->deadline;
             $task->status = $request->status;
             $task->completed_at = $request->completed_at;
 
             if($task->save()) {
+                if ($task->status === "completed") {
+                    Subtask::where('task_id', $request->id)->update(['status' => 'completed', 'completed_at' => date('Y-m-d H:i:s')]);
+                } else {
+                    Subtask::where('task_id', $request->id)->update(['status' => 'ongoing', 'completed_at' => null]);
+                }
                 return response()->json([
                     "success" => true,
                     "message" => "Task updated successfully.",

@@ -6,6 +6,6 @@ body {
   @apply bg-[#eee];
 
   .container {
-    @apply min-h-screen mx-auto py-6 md:px-40;
+    @apply min-h-screen mx-auto py-6 px-4 md:px-40;
   }
 }

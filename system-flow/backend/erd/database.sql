@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2024 at 05:43 PM
+-- Generation Time: Nov 04, 2024 at 04:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,8 +38,8 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(3, '2024_11_02_150938_create_tasks_table', 1),
-(4, '2024_11_02_151024_create_subtasks_table', 1);
+(7, '2024_11_02_150938_create_tasks_table', 1),
+(8, '2024_11_02_151024_create_subtasks_table', 1);
 
 -- --------------------------------------------------------
 
@@ -51,8 +51,7 @@ CREATE TABLE `subtasks` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `task_id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `status` enum('todo','ongoing','completed') NOT NULL,
+  `status` enum('ongoing','completed') NOT NULL DEFAULT 'ongoing',
   `completed_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -67,9 +66,8 @@ CREATE TABLE `subtasks` (
 CREATE TABLE `tasks` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `title` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
   `deadline` datetime NOT NULL,
-  `status` enum('todo','ongoing','completed') NOT NULL,
+  `status` enum('ongoing','completed') NOT NULL DEFAULT 'ongoing',
   `completed_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -105,7 +103,7 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `subtasks`
@@ -117,7 +115,7 @@ ALTER TABLE `subtasks`
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

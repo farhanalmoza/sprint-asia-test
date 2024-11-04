@@ -28,18 +28,7 @@ const calculatePercentage = (status, subtasks) => {
   return (completedSubtasks / subtasks.length) * 100;
 };
 
-const TaskList = ({ tasks, onEdit, onDelete, onDetail, onStatusUpdate }) => {
-  const handleStatusChange = async (task, checked) => {
-    try {
-      const newStatus = checked ? "completed" : "ongoing";
-      const updateTask = { ...task, status: newStatus };
-      await taskService.updateTask(updateTask);
-      toast.success("Task status updated successfully");
-      if (onStatusUpdate) onStatusUpdate();
-    } catch (error) {
-      console.error("Error updating task status", error);
-    }
-  }
+const TaskList = ({ tasks, onDelete, onCheckTask, onEdit }) => {
   return (
     <div className="grid gap-4">
       {tasks.map((task) => (
@@ -49,7 +38,7 @@ const TaskList = ({ tasks, onEdit, onDelete, onDetail, onStatusUpdate }) => {
           <div className="flex gap-2">
             <input
               type="checkbox"
-              onChange={(e) => handleStatusChange(task, e.target.checked)}
+              onChange={() => onCheckTask(task.id)}
               className="w-4" defaultChecked={task.status === "completed"}
             />
             <div className="">
@@ -67,15 +56,17 @@ const TaskList = ({ tasks, onEdit, onDelete, onDetail, onStatusUpdate }) => {
             />
             <div className="grid">
               {/* edit & delete buttons using icons */}
+              {task.status !== "completed" && (
+                <button
+                  onClick={() => onEdit(task)}
+                  className="rounded-lg text-[#3194f0] font-medium">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
+              )}
               <button
-                onClick={() => onEdit(task)}
-                className="rounded-lg text-[#3194f0] font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => onDelete(task)}
+                onClick={() => onDelete(task.id)}
                 className="rounded-lg text-[#e13333] font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

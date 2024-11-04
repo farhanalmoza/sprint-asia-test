@@ -33,9 +33,21 @@ export const taskService = {
   },
 
   // update a task
-  updateTask: async (task) => {
+  updateTask: async (taskId,task) => {
     try {
-      const { success, data, message } = await api.put("/"+task.id, task);
+      const { success, data, message } = await api.put("/"+taskId, task);
+      if (success) {
+        return message;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  // delete a task
+  deleteTask: async (taskId) => {
+    try {
+      const { success, data, message } = await api.delete("/"+taskId);
       if (success) {
         return message;
       }
